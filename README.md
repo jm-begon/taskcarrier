@@ -13,18 +13,23 @@ It is still in development. So far it provides:
 # Note on load balancing
 
 ## Multiprocess context
-In the case of multiprocessing, shipping data to worker processes usually brings a lot of overhead. The goal of the static load balancing is to reduce somewhat that overhead. However, this policy is suboptimal in the case where the processing time of each worker greatly vary.
+In the case of multiprocessing, shipping data to worker processes usually brings a lot of overhead. The goal of the static load balancing is to reduce somewhat that overhead.
 
 Here is a illustrating example in the case of a light task:
 
 ![Load balancing benchmark](inc_size_light_task.pdf)
 
-** Rule of thumb ** :
-* Light task, homogenous computation time: static load balancing
-* Medium/heavy task, heterogenous computation time : dynamic load balancing
+** Rule of thumb for multiprocessing ** :
+* Homogenous computation time
+> The static load balancing should perform better. The performance difference should be most noticeable with light task and lots of data (this probably already helped stabilizing the average computation time).
+* Heterogenous computation time
+> The dynamic load balancing may perform better in that situation provided there is "few" data or that the heteroginty is unevenly scattered throughout the data. Few data will encourage the latter and lessen the proportional shipping overhead cost.
+
+** Rule of thumb for multithreading ** :
+> Go for dynamic load balancing. Only for very homogenous computation time with light task and lots of data will difference be noticeable. Taking advantage of the nearly overhead-free dynamic load balancing will probably be more rewarding.
 
 ## Multithreaded context
-In CPython, multithreading is not carried out in parallel because of the GIL. If you have some code releasing the GIL, using dynamic load balancing with a multithreading backend should be the optimal solution, though. Otherwise, stick to multiprocessing
+In CPython, multithreading is not carried out in parallel because of the GIL. If you have some code releasing the GIL, using dynamic load balancing with a multithreading backend should be the optimal solution, though. Otherwise, stick to multiprocessing.
 
 Getting the latest code
 -----------------------
