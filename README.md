@@ -1,13 +1,14 @@
 TaskCarrier
 ===========
-TaskCarrier is a lightweight Python library built on top of [:lib:`joblib`](https://pythonhosted.org/joblib/) to ease some common use cases.
+TaskCarrier is a lightweight Python library built on top of [`joblib`](https://pythonhosted.org/joblib/) to ease some common use cases.
 
 It is still in development. So far it provides:
+
 1. Map-like utility in serial and parallel
-    * :class:`SerialMapper` is just a wrapper around list comprehension to provide an homogenous interface.
-    * :class:`DynamicParallelMapper` offers a map-like interface for :lib:`joblib`. Pieces of data are queued so as to provde *dynamic load balancing*
-    * :class:`StaticParallelMapper` offers a map-like interface. Data are still treated by :lib:`joblib` but each worker recieve all its data at the start (*static load balancing*)
-2.
+    * `SerialMapper` is just a wrapper around list comprehension to provide an homogenous interface.
+    * `DynamicParallelMapper` offers a map-like interface for `joblib`. Pieces of data are queued so as to provde *dynamic load balancing*
+    * `StaticParallelMapper` offers a map-like interface. Data are still treated by `joblib` but each worker recieve all its data at the start (*static load balancing*)
+2. Context manager to prevent parallel code to use nested parallel code.
 
 # Note on load balancing
 
@@ -15,9 +16,10 @@ It is still in development. So far it provides:
 In the case of multiprocessing, shipping data to worker processes usually brings a lot of overhead. The goal of the static load balancing is to reduce somewhat that overhead. However, this policy is suboptimal in the case where the processing time of each worker greatly vary.
 
 Here is a illustrating example in the case of a light task:
+
 ![Load balancing benchmark](inc_size_light_task.pdf)
 
-** Rule of thumb **:
+** Rule of thumb ** :
 * Light task, homogenous computation time: static load balancing
 * Medium/heavy task, heterogenous computation time : dynamic load balancing
 
