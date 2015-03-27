@@ -93,6 +93,7 @@ if __name__ == '__main__':
     plt.ylabel("Completion time (sec)")
     plt.legend(loc="upper left")
     plt.savefig("inc_size_light_task"+str(cpu)+".pdf", bbox_inches='tight')
+    plt.savefig("inc_size_light_task"+str(cpu)+".png", bbox_inches='tight')
 
 
     plt.figure()
@@ -103,6 +104,7 @@ if __name__ == '__main__':
     plt.ylabel("Completion time (sec)")
     plt.legend(loc="upper left")
     plt.savefig("inc_size_heavy_task"+str(cpu)+".pdf", bbox_inches='tight')
+    plt.savefig("inc_size_heavy_task"+str(cpu)+".png", bbox_inches='tight')
 
 
 
