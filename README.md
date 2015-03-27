@@ -21,8 +21,11 @@ Here is a illustrating example in the case of a light task:
 
 ** Rule of thumb for multiprocessing ** :
 * Homogenous computation time
+
 > The static load balancing should perform better. The performance difference should be most noticeable with light task and lots of data (this probably already helped stabilizing the average computation time).
+
 * Heterogenous computation time
+
 > The dynamic load balancing may perform better in that situation provided there is "few" data or that the heteroginty is unevenly scattered throughout the data. Few data will encourage the latter and lessen the proportional shipping overhead cost.
 
 ** Rule of thumb for multithreading ** :
