@@ -18,21 +18,21 @@ In the case of multiprocessing, shipping data to worker processes usually brings
 Here is a illustrating example in the case of a light task:
 
 ![Load balancing benchmark](inc_size_light_task.png)
-_Computation time performances of the Mappers for a ligth task with 4 multiprocessing workers with respect to the data size_
-_Even though the task is light, one might want to take advantage of parallelization if there are lots of data. In this case, dynamic load balancing
+>Computation time performances of the Mappers for a ligth task with 4 multiprocessing workers with respect to the data size.
+>_Even though the task is light, one might want to take advantage of parallelization if there are lots of data. In this case, dynamic load balancing
 will not even outperform the serial computation because the overhead is proprotionally too expensive. However, at 600-700 data, the initial overhead paid by static load balancing is counterbalanced by the parallelization, leaving it the most efficient method. Note that the difference between dynamic and static load balancing is roughly linear. With heavier task, the gap between both load policy is reduced but static load balancing will usually outperfoms dynamic with a linear trend nonetheless._
 
 **Rule of thumb for multiprocessing** :
 * Homogenous computation time
 
-> The static load balancing should perform better. The performance difference should be most noticeable with light task and lots of data (this probably already helped stabilizing the average computation time).
+The static load balancing should perform better. The performance difference should be most noticeable with light task and lots of data (this probably already helped stabilizing the average computation time).
 
 * Heterogenous computation time
 
-> The dynamic load balancing may perform better in that situation provided there is "few" data or that the heteroginty is unevenly scattered throughout the data. Few data will encourage the latter and lessen the proportional shipping overhead cost.
+The dynamic load balancing may perform better in that situation provided there is "few" data or that the heteroginty is unevenly scattered throughout the data. Few data will encourage the latter and lessen the proportional shipping overhead cost.
 
 **Rule of thumb for multithreading** :
-> Go for dynamic load balancing. Only for very homogenous computation time with light task and lots of data will difference be noticeable. Taking advantage of the nearly overhead-free dynamic load balancing will probably be more rewarding.
+Go for dynamic load balancing. Only for very homogenous computation time with light task and lots of data will difference be noticeable. Taking advantage of the nearly overhead-free dynamic load balancing will probably be more rewarding.
 
 ## Multithreaded context
 In CPython, multithreading is not carried out in parallel because of the GIL. If you have some code releasing the GIL, using dynamic load balancing with a multithreading backend should be the optimal solution, though. Otherwise, stick to multiprocessing.
