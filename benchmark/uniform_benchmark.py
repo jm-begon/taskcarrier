@@ -9,10 +9,10 @@ __date__ = "26 Mar. 2015"
 
 
 import time
+import random
 import matplotlib.pyplot as plt
 
-from taskcarrier import (SerialMapper, StaticParallelMapper,
-                         DynamicParallelMapper)
+from taskcarrier import StaticParallelMapper, DynamicParallelMapper
 try:
     from joblib import cpu_count
 except ImportError:
@@ -27,48 +27,37 @@ class Timer(object):
         return time.time() - self.t
 
 def light_task(x):
-    time.sleep(0.0001)
+    sleep_sec = random.uniform(0, 0.001)
+    time.sleep(sleep_sec)
     return x+1
 
-def heavy_task(x):
-    time.sleep(0.01)
-    return x+1
+
 
 
 
 if __name__ == '__main__':
-    cpu = 2
+    cpu = 4
     max_cpu = cpu_count()
     assert max_cpu >= cpu, "Not enough CPU"
 
-    nb_run = 10
+    nb_run = 1  # Several runs would blur the results
 
     size_range = range(0, 3001, 50)
     timer = Timer()
 
-    serial = SerialMapper()
     static = StaticParallelMapper(cpu)
     dynamic = DynamicParallelMapper(cpu)
-    mappers = [static, dynamic, serial]
+    mappers = [static, dynamic]
     # light_task
-    serial_light = []
     static_light = []
     dynamic_light = []
-    light_tasks_res = [static_light, dynamic_light, serial_light]
-    # Heavy task
-    serial_heavy = []
-    static_heavy = []
-    dynamic_heavy = []
-    heavy_tasks_res = [static_heavy, dynamic_heavy, serial_heavy]
+    light_tasks_res = [static_light, dynamic_light]
+
 
     lgt_exp = zip(mappers, light_tasks_res, [light_task]*3)
-    hvy_exp = zip(mappers, heavy_tasks_res, [heavy_task]*3)[0:2]
 
-    #experiences = lgt_exp
-    #experiences = hvy_exp
-    experiences = lgt_exp + hvy_exp
 
-    for mapper, ls, task in experiences:
+    for mapper, ls, task in lgt_exp:
         print "New experience ", mapper, task
         for size in size_range:
             data = range(size)
@@ -82,13 +71,11 @@ if __name__ == '__main__':
 
         print
 
-
     try:
         plt.figure()
-        plt.plot(size_range, serial_light, "r", label="Serial")
         plt.plot(size_range, static_light, "g", label="Static LB")
         plt.plot(size_range, dynamic_light, "b", label="Dynamic LB")
-        plt.title("Average Mapper performance on a light task ("+str(cpu)+" cores)")
+        plt.title("Mapper performances with random uniform computation time ("+str(cpu)+" cores)")
         plt.xlabel("Data size")
         plt.ylabel("Completion time (sec)")
         plt.legend(loc="upper left")
@@ -96,24 +83,13 @@ if __name__ == '__main__':
         plt.savefig("inc_size_light_task"+str(cpu)+".png", bbox_inches='tight')
 
 
-        plt.figure()
-        plt.plot(size_range, static_heavy, "g", label="Static LB")
-        plt.plot(size_range, dynamic_heavy, "b", label="Dynamic LB")
-        plt.title("Average Mapper performance on a heavy task ("+str(cpu)+" cores)")
-        plt.xlabel("Data size")
-        plt.ylabel("Completion time (sec)")
-        plt.legend(loc="upper left")
-        plt.savefig("inc_size_heavy_task"+str(cpu)+".pdf", bbox_inches='tight')
-        plt.savefig("inc_size_heavy_task"+str(cpu)+".png", bbox_inches='tight')
-
     finally:
         print size_range
-        print serial_light
         print static_light
         print dynamic_light
-        print
-        print static_heavy
-        print dynamic_heavy
+
+
+
 
 
 
