@@ -18,9 +18,9 @@ In the case of multiprocessing, shipping data to worker processes usually brings
 Here is a illustrating example in the case of a light task:
 
 ![Load balancing benchmark](inc_size_light_task.png)
->Computation time performances of the Mappers for a ligth task with 4 multiprocessing workers with respect to the data size.
+>__Computation time performances of the Mappers for a ligth task with 4 multiprocessing workers with respect to the data size.__
 >_Even though the task is light, one might want to take advantage of parallelization if there are lots of data. In this case, dynamic load balancing
-will not even outperform the serial computation because the overhead is proprotionally too expensive. However, at 600-700 data, the initial overhead paid by static load balancing is counterbalanced by the parallelization, leaving it the most efficient method. Note that the difference between dynamic and static load balancing is roughly linear. With heavier task, the gap between both load policy is reduced but static load balancing will usually outperfoms dynamic with a linear trend nonetheless._
+will not even outperform the serial computation because the overhead is proprotionally too expensive. However, at 600-700 data, the initial overhead paid by static load balancing is counterbalanced by the parallelization, leaving it the most efficient method. Note that the difference between dynamic and static load balancing is roughly linear. With heavier task, the gap between both load policy is reduced but static load balancing will usually outperfoms dynamic with a linear trend nonetheless. See the benchmarks for more information_
 
 **Rule of thumb for multiprocessing** :
 * Homogenous computation time
